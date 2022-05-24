@@ -26,18 +26,18 @@ module.exports = (server) => {
 
   // add a customer
   server.post('/customers', async (req, res, next) => {
-    if (!req.is('application/json')) {
-      return next(new errors.InvalidContentError("Expected 'application/json'"))
-    }
+    // if (!req.is('application/json')) {
+    //   return next(new errors.InvalidContentError("Expected 'application/json'"))
+    // }
     const { name, email, balance } = req.body
-    customer = new Customer({
+    const customer = new Customer({
       name,
       email,
       balance
     })
     try {
       await customer.save()
-      res.send(201)
+      res.send(201, customer)
       next()
     } catch (error) {
       return next(new errors.BadRequestError(error.message))
@@ -46,13 +46,17 @@ module.exports = (server) => {
 
   // update customer
   server.put('/customers/:id', async (req, res, next) => {
-    if (!req.is('application/json')) {
-      return next(new errors.InvalidContentError("Expected 'application/json'"))
-    }
+    // if (!req.is('application/json')) {
+    //   return next(new errors.InvalidContentError("Expected 'application/json'"))
+    // }
 
     try {
-      const customer = await Customer.findOneAndUpdate({ _id: req.params.id }, req.body)
-      res.send(200)
+      const customer = await Customer.findOneAndUpdate(
+        { _id: req.params.id },
+        req.body,
+        { new: true }
+      )
+      res.send(200, customer)
       next()
     } catch (err) {
       return next(new errors.ResourceNotFoundError(`There is no customer with the id of ${req.params.id}`))
