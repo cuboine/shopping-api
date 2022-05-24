@@ -1,0 +1,21 @@
+{
+  "name": "exam",
+  "version": "1.0.0",
+  "description": "smartwave exam",
+  "main": "index.js",
+  "scripts": {
+    "build": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "author": "Marco Apolonio",
+  "license": "ISC",
+  "dependencies": {
+    "mongoose": "^6.3.4",
+    "mongoose-timestamp": "^0.6.0",
+    "restify": "^8.6.1",
+    "restify-errors": "^8.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.16"
+  }
+}

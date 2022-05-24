@@ -1,0 +1,37 @@
+Using nodejs, restify, mongodb (using mongoose). Create an api for a sample shopping application.
+
+Upon completion, provide provide the schema for the models you created, the git repository and the postman documentation
+
+
+Details:
+
+product
+- item that will be sold
+- don't need to have quantity
+
+cart
+- place where the buyer place the products that they will buy
+- cart will be cleared after the buyer checkouts the cart
+
+order
+- list of bought items
+- 1 order is equal to 1 product
+
+seller
+- () can signup
+- () can login
+- can create a product
+- can list their own product
+- can list orders they recieved
+
+buyer
+- () can signup
+- () can login
+- can list products of all seller
+- can add to cart products
+- can get cart
+- can checkout the cart
+- can can list their bought orders
+
+notes
+(*) - does not need to be logged in, the rest should be logged in in order to be used
