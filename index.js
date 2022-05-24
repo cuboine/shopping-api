@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const restify = require('restify')
 const mongoose = require('mongoose')
 const config = require('./config')
@@ -10,10 +12,7 @@ server.use(restify.plugins.bodyParser())
 
 server.listen(config.PORT, () => {
   try {
-    mongoose.connect(
-      config.MONGODB_URI,
-      { useNewUrlParser: true }
-    )
+    mongoose.connect(config.MONGODB_URI)
   } catch (err) {
     console.log(err)
   }
