@@ -18,5 +18,5 @@ const productSchema = new Schema({
 
 productSchema.plugin(timestamp)
 
-const Product = new model('Product', productSchema)
+const Product = model('Product', productSchema)
 module.exports = Product
