@@ -67,7 +67,7 @@ module.exports = (server) => {
   server.get('/sellers/:id/orders', async (req, res, next) => {
     try {
       const orders = await Order.find({
-        'productId.sellerId': req.params.id
+        sellerId: req.params.id
       })
         .populate('customerId')
         .populate('productId')

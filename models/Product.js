@@ -20,6 +20,7 @@ const productSchema = new Schema({
   }
 })
 
+productSchema.index({ sellerId: 1 })
 productSchema.plugin(timestamp)
 
 const Product = model('Product', productSchema)

@@ -2,6 +2,11 @@ const mongoose = require('mongoose')
 const timestamp = require('mongoose-timestamp')
 
 const orderSchema = new mongoose.Schema({
+  sellerId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: 'Seller'
+  },
   productId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
@@ -18,7 +23,7 @@ const orderSchema = new mongoose.Schema({
   // }
 })
 
-orderSchema.index({ customerId: 1 })
+orderSchema.index({ customerId: 1, sellerId: 1, productId: 1 })
 orderSchema.plugin(timestamp)
 
 const Order = mongoose.model('Order', orderSchema)

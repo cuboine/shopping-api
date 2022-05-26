@@ -1,6 +1,8 @@
 const errors = require('restify-errors')
 
-const Product = require('../models/Product.js')
+const Cart = require('../models/Cart')
+const Customer = require('../models/Customer')
+const Product = require('../models/Product')
 
 module.exports = (server) => {
   // get product
@@ -8,6 +10,7 @@ module.exports = (server) => {
     try {
       const product = await Product.findById(req.params.id)
       res.send(product)
+
       return next()
     } catch (err) {
       return next(new errors.ResourceNotFoundError(`Could not find a \`Product\` with id of ${req.params.id}`))
@@ -19,6 +22,7 @@ module.exports = (server) => {
     try {
       const products = await Product.find()
       res.send(products)
+
       return next()
     } catch (err) {
       return next(new errors.InvalidContentError(err))
@@ -42,6 +46,29 @@ module.exports = (server) => {
       return next()
     } catch (err) {
       return next(new errors.InvalidContentError(err))
+    }
+  })
+
+  server.post('/products/:id/add-to-cart', async (req, res, next) => {
+    const userId = req.user._id
+    try {
+      // get customerId with req.user._id
+      const customer = await Customer.findOne({ userId }, '_id')
+
+      // add to cart
+      try {
+        const cart = await Cart.findOne({ customerId: customer._id })
+        const product = await Product.findById(req.params.id)
+
+        cart.products.push(product)
+        await cart.save()
+        res.send(200, { message: `Product ${product.name} added to cart -> Customer ${customer._id}` })
+      } catch (err) {
+        return next(new errors.InternalError(err))
+      }
+
+    } catch (err) {
+      return next(new errors.InternalError(err))
     }
   })
 
