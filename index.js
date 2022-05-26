@@ -22,6 +22,8 @@ const db = mongoose.connection
 db.on('error', (error) => console.log(error))
 
 db.once('open', () => {
+  require('./routes/users')(server)
+  require('./routes/cart')(server)
   require('./routes/customers')(server)
   require('./routes/products')(server)
   require('./routes/seller.js')(server)

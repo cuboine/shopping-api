@@ -1,5 +1,7 @@
 const errors = require('restify-errors')
+
 const Customer = require('../models/Customer')
+const Order = require('../models/Order')
 
 module.exports = (server) => {
   // get a single customer
@@ -16,7 +18,7 @@ module.exports = (server) => {
   // get all customers
   server.get('/customers', async (req, res, next) => {
     try {
-      const customers = await Customer.find()
+      const customers = await Customer.find().populate('userId')
       res.send(customers)
       next()
     } catch (err) {
@@ -26,9 +28,9 @@ module.exports = (server) => {
 
   // add a customer
   server.post('/customers', async (req, res, next) => {
-    // if (!req.is('application/json')) {
-    //   return next(new errors.InvalidContentError("Expected 'application/json'"))
-    // }
+    if (!req.is('application/json')) {
+      return next(new errors.InvalidContentError("Expected 'application/json'"))
+    }
     const { name, email, balance } = req.body
     const customer = new Customer({
       name,
@@ -44,33 +46,19 @@ module.exports = (server) => {
     }
   })
 
-  // update customer
-  server.put('/customers/:id', async (req, res, next) => {
-    // if (!req.is('application/json')) {
-    //   return next(new errors.InvalidContentError("Expected 'application/json'"))
-    // }
-
+  /* customer -> orders */
+  // get list of orders received by seller
+  server.get('/customers/:id/orders', async (req, res, next) => {
     try {
-      const customer = await Customer.findOneAndUpdate(
-        { _id: req.params.id },
-        req.body,
-        { new: true }
-      )
-      res.send(200, customer)
-      next()
-    } catch (err) {
-      return next(new errors.ResourceNotFoundError(`There is no customer with the id of ${req.params.id}`))
-    }
-  })
+      const orders = await Order.find({
+        customerId: req.params.id
+      }).populate('productId')
 
-  // delete a customer
-  server.del('/customers/:id', async (req, res, next) => {
-    try {
-      const customer = await Customer.findOneAndRemove({ _id: req.params.id })
-      res.send(204)
+      res.send(orders)
       return next()
     } catch (err) {
-      return next(new errors.ResourceNotFoundError(`There is no customer with the id of ${req.params.id}`))
+      return next(new errors.InvalidContentError(err.message))
     }
   })
+
 }

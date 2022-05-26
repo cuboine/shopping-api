@@ -1,4 +1,5 @@
 const errors = require('restify-errors')
+
 const Product = require('../models/Product.js')
 
 module.exports = (server) => {
@@ -44,14 +45,57 @@ module.exports = (server) => {
     }
   })
 
-  // // delete one product
-  // server.del('/products/:id', async (req, res, next) => {
-  //   try {
-  //     const product = Product.findOneAndDelete({ _id: req.params.id })
-  //     res.send(204)
-  //     return next()
-  //   } catch (err) {
-  //     return next(new errors.ResourceNotFoundError(`Could not find a \`Product\` with id ${req.params.id}`))
-  //   }
-  // })
+
+  /* seller -> products */
+  // get all products by seller
+  server.get('/sellers/:id/products', async (req, res, next) => {
+    try {
+      const products = await Product.find({
+        sellerId: req.params.id
+      }).populate('sellerId')
+
+      res.send(products)
+      return next()
+    } catch (err) {
+      return next(new errors.ResourceNotFoundError(`Could not find seller with id of ${req.params.id}`))
+    }
+  })
+
+  // add product
+  server.post('/sellers/:id/products', async (req, res, next) => {
+    // check for json
+    if (!req.is('application/json')) {
+        return next(new errors.InvalidContentError())
+    }
+
+    const { name, price } = req.body
+    const product = new Product({
+      name,
+      price,
+      sellerId: req.params.id,
+    })
+
+    try {
+      await product.save()
+      res.send(201, product)
+      return next()
+    } catch (error) {
+      return next(new errors.BadRequestError(error.message))
+    }
+  })
+
+  // get a single product by the seller
+  server.get('/seller/:id/product/:productId', async (req, res, next) => {
+    try {
+      const product = await Product.find({
+        _id: req.params.productId,
+        sellerId: req.params.id
+      }).populate('sellerId')
+
+      res.send(product)
+      return next()
+    } catch (err) {
+      return next(new errors.ResourceNotFoundError(err))
+    }
+  })
 }

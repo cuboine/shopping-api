@@ -14,5 +14,7 @@ const cartSchema = new mongoose.Schema({
   ]
 })
 
+cartSchema.index({ customerId: 1 }, { unique: true })
+
 const Cart = mongoose.model('Cart', cartSchema)
 module.exports = Cart

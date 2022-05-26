@@ -13,6 +13,8 @@ const sellerSchema = new Schema({
   }
 })
 
+sellerSchema.index({ userId: 1 }, { unique: true })
+sellerSchema.index({ name: 1 }, { unique: true })
 sellerSchema.plugin(timestamp)
 
 const Seller = model('Seller', sellerSchema)
