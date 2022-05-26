@@ -2,15 +2,19 @@ const mongoose = require('mongoose')
 const timestamp = require('mongoose-timestamp')
 
 const customerSchema = new mongoose.Schema({
-  name: {
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+  },
+  firstName: {
     type: String,
-    required: [ true, 'Field name required.' ],
+    required: true,
     trim: true
   },
-  email: {
+  lastName: {
     type: String,
-    required: [ true, 'Field email required.' ],
-    trim: true,
+    required: true,
+    trim: true
   },
   balance: {
     type: Number,
