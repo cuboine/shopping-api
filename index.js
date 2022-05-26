@@ -3,12 +3,15 @@ require('dotenv').config()
 const restify = require('restify')
 const mongoose = require('mongoose')
 const config = require('./config')
+const rjwt = require('restify-jwt-community')
 
 const server = restify.createServer()
 
 server.pre(restify.plugins.pre.dedupeSlashes())
 server.pre(restify.plugins.pre.sanitizePath())
 server.use(restify.plugins.bodyParser())
+
+server.use(rjwt({ secret: config.JWT_SECRET }).unless({ path: ['/register', '/login'] }))
 
 server.listen(config.PORT, () => {
   try {

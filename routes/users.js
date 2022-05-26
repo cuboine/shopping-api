@@ -1,10 +1,14 @@
-const bcrypt = require('bcryptjs')
 const errors = require('restify-errors')
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 
 const Cart = require('../models/Cart')
 const Customer = require('../models/Customer')
 const Seller = require('../models/Seller')
 const User = require('../models/User')
+
+const auth = require('../auth')
+const config = require('../config')
 
 module.exports = (server) => {
 
@@ -22,6 +26,10 @@ module.exports = (server) => {
     bcrypt.hash(user.password, 10, async (err, hash) => {
       if (err) {
         console.log('bcrypt:', err)
+      }
+
+      if (!req.body.type) {
+        return next(new errors.BadRequestError('Must include account \`type\`'))
       }
 
       // set hashed password
@@ -70,8 +78,6 @@ module.exports = (server) => {
           } catch (err) {
             return next(new errors.BadRequestError(err.message))
           }
-        } else {
-          return next(new errors.InvalidContentError('Must include account \`type\`'))
         }
 
         res.send(201, { message: 'Account creation successful' })
@@ -84,8 +90,26 @@ module.exports = (server) => {
   })
 
   server.post('/login', async (req, res, next) => {
-    // Here we authenticate the User
+    // authenticate the User
     // and return their token
+    const { email, password } = req.body
+
+    try {
+      const user = await auth.authenticate(email, password)
+
+      // create token
+      const token = jwt.sign(user.toJSON(), config.JWT_SECRET, {
+        expiresIn: '30m'
+      })
+
+      // issued_at, expiry
+      const { iat, exp } = jwt.decode(token)
+      res.send({ iat, exp, token })
+
+      return next()
+    } catch (err) {
+      return next(new errors.UnauthorizedError(err))
+    }
   })
 
 }
