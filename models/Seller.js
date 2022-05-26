@@ -1,14 +1,18 @@
 const { Schema, model } = require('mongoose')
-const timestamp = require('mongoose')
+const timestamp = require('mongoose-timestamp')
 
 const sellerSchema = new Schema({
-    name: {
-        type: String,
-        required: true
-    } 
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  },
+  name: {
+    type: String,
+    required: true
+  }
 })
 
 sellerSchema.plugin(timestamp)
 
-const Seller = new model('Seller', sellerSchema)
+const Seller = model('Seller', sellerSchema)
 module.exports = Seller

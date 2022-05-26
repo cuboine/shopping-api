@@ -24,5 +24,6 @@ db.on('error', (error) => console.log(error))
 db.once('open', () => {
   require('./routes/customers')(server)
   require('./routes/products')(server)
+  require('./routes/seller.js')(server)
   console.log(`Server started on port ${config.PORT}`)
 })
