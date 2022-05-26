@@ -114,7 +114,7 @@ module.exports = (server) => {
     try {
       const product = await Product.find({
         _id: req.params.productId,
-        userId: req.params.id
+        sellerId: req.params.id
       })
       res.send(product)
       return next()
@@ -128,7 +128,7 @@ module.exports = (server) => {
     try {
       const product = await Product.findOneAndUpdate({
         _id: req.params.productId,
-        userId: req.params.id
+        sellerId: req.params.id
       }, req.body, { new: true })
 
       res.send(200, product)
