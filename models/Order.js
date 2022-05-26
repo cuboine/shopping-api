@@ -4,12 +4,13 @@ const timestamp = require('mongoose-timestamp')
 const orderSchema = new mongoose.Schema({
   productId: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true
+    required: true,
+    ref: 'Product'
   },
-  checkedOut: {
-    type: Boolean,
-    default: false
-  }
+  // checkedOut: {
+  //   type: Boolean,
+  //   default: false
+  // }
 })
 
 orderSchema.plugin(timestamp)

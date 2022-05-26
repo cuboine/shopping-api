@@ -12,9 +12,12 @@ const productSchema = new Schema({
   },
   sellerId: {
     type: Schema.Types.ObjectId,
-    required: true
+    required: true,
+    ref: 'Seller'
   },
-  description: String
+  description: {
+    type: String
+  }
 })
 
 productSchema.plugin(timestamp)
