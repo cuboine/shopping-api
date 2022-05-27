@@ -42,10 +42,18 @@ module.exports = (server) => {
         }))
       }
 
-      const values = await Promise.all(requests)
+      await Promise.all(requests)
         .catch((err) => {
           return next(new errors.InternalError(err))
         })
+
+      // clear cart
+      cart.products = []
+      try {
+        await cart.save()
+      } catch (err) {
+        return next(new errors.InternalError(err.message))
+      }
 
       res.send(200)
       return next()
