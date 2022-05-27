@@ -17,6 +17,10 @@ module.exports = (server) => {
 
   // update seller
   server.put('/sellers/:id', async (req, res, next) => {
+    if (req.user.type !== 'seller') {
+      return next(new errors.ForbiddenError('NotAllowed'))
+    }
+
     try {
       const seller = await Seller.findOneAndUpdate(
         { _id: req.params.id },
@@ -30,7 +34,7 @@ module.exports = (server) => {
     }
   })
 
-  // get all sellers
+  // get all sellers (todo: limit for admins)
   server.get('/sellers', async (req, res, next) => {
     try {
       const sellers = await Seller.find().populate('userId')
@@ -65,6 +69,10 @@ module.exports = (server) => {
   /* seller -> orders */
   // get list of orders received by seller
   server.get('/sellers/:id/orders', async (req, res, next) => {
+    if (req.user.type !== 'seller') {
+      return next(new errors.ForbiddenError('NotAllowed'))
+    }
+
     try {
       const orders = await Order.find({
         sellerId: req.params.id

@@ -15,7 +15,7 @@ module.exports = (server) => {
     }
   })
 
-  // get all customers
+  // get all customers (todo: limit for admins)
   server.get('/customers', async (req, res, next) => {
     try {
       const customers = await Customer.find().populate('userId')
@@ -26,7 +26,7 @@ module.exports = (server) => {
     }
   })
 
-  // add a customer
+  // add a customer (*currently unused code, customer gets created at user creation)
   server.post('/customers', async (req, res, next) => {
     if (!req.is('application/json')) {
       return next(new errors.InvalidContentError("Expected 'application/json'"))
@@ -49,6 +49,10 @@ module.exports = (server) => {
   /* customer -> orders */
   // get list of orders received by seller
   server.get('/customers/:id/orders', async (req, res, next) => {
+    if (req.user.type === 'seller') {
+      return next(new errors.ForbiddenError('Not Allowed'))
+    }
+
     try {
       const orders = await Order.find({
         customerId: req.params.id

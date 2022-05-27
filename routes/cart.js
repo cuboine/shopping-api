@@ -4,6 +4,10 @@ const Order = require('../models/Order')
 
 module.exports = (server) => {
   server.get('/customers/:id/cart', async (req, res, next) => {
+    if (req.user.type !== 'customer') {
+      return next(new errors.ForbiddenError('NotAllowed'))
+    }
+
     try {
       let cart = await Cart.find({
         customerId: req.params.id
@@ -19,6 +23,10 @@ module.exports = (server) => {
   })
 
   server.post('/customers/:id/cart/checkout', async (req, res, next) => {
+    if (req.user.type !== 'customer') {
+      return next(new errors.ForbiddenError('NotAllowed'))
+    }
+
     try {
       const cart = await Cart.findOne({
         customerId: req.params.id

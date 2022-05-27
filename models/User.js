@@ -10,10 +10,16 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true
+  },
+  type: {
+    type: String,
+    required: true,
+    enum: ['customer', 'seller']
   }
 })
 
 userSchema.index({ email: 1 }, { unique: true })
+userSchema.index({ type: 1 })
 userSchema.plugin(timestamp)
 
 const User = mongoose.model('User', userSchema)

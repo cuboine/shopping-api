@@ -16,10 +16,11 @@ module.exports = (server) => {
   // Customer (and Cart),
   // or Seller instances
   server.post('/register', async (req, res, next) => {
-    const { email, password } = req.body
+    const { email, password, type } = req.body
     const user = new User({
       email,
-      password
+      password,
+      type
     })
 
     // salt and hash password
@@ -40,7 +41,7 @@ module.exports = (server) => {
         console.log(`User document created for ${user.email}`)
 
         // create user type
-        if (req.body.type === 'customer') {
+        if (user.type === 'customer') {
 
           // create customer
           const { firstName, lastName } = req.body
@@ -66,7 +67,7 @@ module.exports = (server) => {
             return next(new errors.InternalError(err.message))
           }
 
-        } else if (req.body.type === 'seller') {
+        } else if (user.type === 'seller') {
           const { name } = req.body
           const seller = new Seller({
             userId: user._id,
