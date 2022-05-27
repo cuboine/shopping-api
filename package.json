@@ -4,7 +4,7 @@
   "description": "smartwave exam",
   "main": "index.js",
   "scripts": {
-    "build": "node index.js",
+    "start": "node index.js",
     "dev": "nodemon index.js"
   },
   "author": "Marco Apolonio",
