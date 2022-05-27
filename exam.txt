@@ -35,20 +35,3 @@ buyer
 
 notes
 (*) - does not need to be logged in, the rest should be logged in in order to be used
-
-
-/customers                      # get, post
-/customer/<id>                  # get, put, delete
-/customer/<id>/cart             # get
-/customer/<id>/cart/checkout    # post
-/customer/<id>/orders           # get
-
-/sellers                        # get, post
-/seller/<id>                    # get, put, delete
-/seller/<id>/orders             # get
-/seller/<id>/products           # get, post
-/seller/<id>/product/<p_id>     # get, put, delete
-
-/products                       # get
-/product/<id>                   # get
-/product/<id>/add-to-cart       # post
