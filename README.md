@@ -3,6 +3,10 @@ Shopping API using Node.js, restify, and MongoDB (mongoose)
 
 ### Heroku
   [https://shopping-api-sw.herokuapp.com](https://shopping-api-sw.herokuapp.com)
+  
+
+### Database Schema
+  [Database Schema](https://github.com/cuboine/shopping-api/files/8784485/ERD.Shopping.API.pdf)
 
 
 ### Documentation
@@ -13,8 +17,6 @@ The **Postman Documentation** can be viewed [here](https://documenter.getpostman
 > Every endpoint requires to be authenticated except for `/register` and `/login`.
 - Register
   - `/register`
-
-
 
       |Field|Type|Required|Value
       |---|---|---|:---:|
@@ -62,3 +64,4 @@ The **Postman Documentation** can be viewed [here](https://documenter.getpostman
    
 - Get list of orders (seller)
   - `/sellers/:id/orders`
+
